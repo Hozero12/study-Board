@@ -6,6 +6,9 @@ import hoyo12.board.entity.BoardEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -15,6 +18,16 @@ public class BoardService {
     public void save(BoardDTO boardDTO) {
         BoardEntity boardEntity = BoardEntity.toSaveEntity(boardDTO);
         boardRepository.save(boardEntity); // entity 만 받을수 있기 때문에  dbo -> entity
+    }
+
+    public List<BoardDTO> findAll() {
+        List<BoardEntity> boardEntityList = boardRepository.findAll();
+        ArrayList boardlist = new ArrayList<>();
+
+        for (BoardEntity boardEntity : boardEntityList) {
+            boardlist.add(BoardDTO.toBoardDTO(boardEntity));
+        }
+        return boardlist;
     }
 
 }
