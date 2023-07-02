@@ -1,6 +1,7 @@
 package hoyo12.board.controller;
 
 import hoyo12.board.dto.BoardDTO;
+import hoyo12.board.entity.BoardEntity;
 import hoyo12.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,12 +41,28 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public String post(@PathVariable("boardId") long id ,  Model model) {
-        boardService.updateHits(id);
-        BoardDTO find_post  = boardService.findById(id);
+    public String post(@PathVariable Long boardId, Model model) {
+        boardService.updateHits(boardId);
+        BoardDTO find_post = boardService.findById(boardId);
 
         model.addAttribute("board", find_post);
 
         return "detail";
+    }
+
+    @GetMapping("/update/{boarId}")
+    public String updateForm(@PathVariable Long boarId, Model model) {
+        BoardDTO boardDTO = boardService.findById(boarId);
+        model.addAttribute("boardUpdate", boardDTO);
+
+        return "update";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute BoardDTO boardDTO, Model model) {
+        BoardDTO board = boardService.update(boardDTO);
+        model.addAttribute("board", board);
+        return "detail";
+
     }
 }
